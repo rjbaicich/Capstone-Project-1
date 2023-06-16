@@ -1,10 +1,12 @@
-#Install necessary packages
+#Install necessary packages and libraries.
 
 install.packages("ggplot2")
-library(ggplot2)
 install.packages("tidyverse")
-library(tidyverse)
+install.packages("tidyr")
 
+library(ggplot2)
+library(tidyverse)
+library(tidyr)
 
 # Import the CSV file
 data <- read.csv("C:\Users\RedneckRandy\Documents\GitHub\Capstone-Project-1\GSAF5.xls.csv")
