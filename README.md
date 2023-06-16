@@ -1,1 +1,6 @@
 # Capstone-Project-1
+
+#Project explained below......
+
+
+#My hypothesis about the data.....
