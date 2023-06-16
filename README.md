@@ -7,7 +7,7 @@ Sharks are often perceived as man-eating monsters, but in reality, understanding
 
 Dataset:
 
-The dataset used in this project was originally collected from the Global Shark Attack file, available on the Shark Research Institute's website. It can be downloaded from Kaggle's Shark Attack Dataset repository. The dataset provides comprehensive information about shark attacks worldwide, including details such as the date, location, activity, species involved, and outcome of the attacks.
+The dataset used in this project was originally collected from the Global Shark Attack file, available on the Shark Research Institute's website.https://www.sharkattackfile.net. It can be downloaded from Kaggle's Shark Attack Dataset repository.https://www.kaggle.com/datasets/thedevastator/shark-attacks-the-risks-of-coastal-water-activit. The dataset provides comprehensive information about shark attacks worldwide, including details such as the date, location, activity, species involved, and outcome of the attacks.
 
 Objectives:
 
