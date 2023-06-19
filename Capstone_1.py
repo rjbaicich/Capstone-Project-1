@@ -74,85 +74,76 @@ conn = psycopg2.connect(dbname='gblqlzwo',
 cur = conn.cursor()
 
 #Define the columns for the table
-columns = ['index', 'Case Number', 'Date', 'Year', 'Type', 'Country', 'Area', 'Location', 'Activity', 'Name',
-           'Unnamed: 9', 'Age', 'Injury', 'Fatal (Y/N)', 'Time', 'Species', 'Investigator or Source', 'pdf',
-           'href formula', 'href', 'Case Number.1', 'Case Number.2', 'original order']
+columns = ['Date', 'Year', 'Type', 'Country', 'Area', 'Location', 'Activity', 'Name', 'Age', 'Injury', 'Fatal(y/n)', 'Time', 'Species']
 
 create_table_query = '''
     CREATE TABLE shark_data(
-        "index" INT,
-        "Case Number" VARCHAR(100),
-        "Date" VARCHAR(100),
+        "Date" VARCHAR(200),
         "Year" INT,
-        "Type" VARCHAR(100),
-        "Country" VARCHAR(100),
-        "Area" VARCHAR(100),
-        "Location" VARCHAR(100),
-        "Activity" VARCHAR(100),
-        "Name" VARCHAR(100),
-        "Unnamed: 9" VARCHAR(100),
-        "Age" VARCHAR(100),
-        "Injury" VARCHAR(100),
-        "Fatal (Y/N)" VARCHAR(100),
-        "Time" VARCHAR(100),
-        "Species" VARCHAR(100),
-        "Investigator or Source" VARCHAR(100),
-        "pdf" VARCHAR(100),
-        "href formula" VARCHAR(100),
-        "href" VARCHAR(100),
-        "Case Number.1" VARCHAR(100),
-        "Case Number.2" VARCHAR(100),
-        "original order" INT
+        "Type" VARCHAR(200),
+        "Country" VARCHAR(200),
+        "Area" VARCHAR(200),
+        "Location" VARCHAR(200),
+        "Activity" VARCHAR(200),
+        "Name" VARCHAR(200),
+        "Age" VARCHAR(200),
+        "Injury" VARCHAR(200),
+        "Fatal(y/n)" VARCHAR(200),
+        "Time" VARCHAR(200),
+        "Species" VARCHAR(200)
     )
 '''
 cur.execute(create_table_query)
 
-for _, row in data[columns].iterrows():
+for _, row in df[columns].iterrows():
     insert_query = '''
-        INSERT INTO shark_data ("Index", "Case Number", "Date", "Year", "Type", "Country", "Area", "Location",
-                                 "Activity", "Name", "Age", "Injury", "Fatal(Y/N)", "Time", "Species",
-                                 "Investigator or Source", "Pdf", "Href formula", "Href", "Case Number.1",
-                                 "Case Number.2", "Original order")
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO shark_data ("Date", "Year", "Type", "Country", "Area", "Location",
+                                 "Activity", "Name", "Age", "Injury", "Fatal(y/n)", "Time", "Species")
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     '''
     cur.execute(insert_query, tuple(row))
+    
+    conn.commit()
 
-conn.commit()
+#Counting the occurrences of each activity
+activity_counts = df['Activity'].value_counts()
 
-#Plot the data
+#Selecting the top 15 activities
+top_activities = activity_counts.head(7)
 
-plt.figure(figsize=(10, 6))
-plt.scatter(data['Species'], data['Type'])
+#Calculating the percentage of each activity
+activity_percentages = (top_activities / len(df)) * 100
+
+#Creating the pie chart
+plt.figure(figsize=(8, 8))
+plt.pie(activity_percentages, labels=activity_percentages.index, autopct='%1.1f%%', startangle=90)
+plt.axis('equal')  #Equal aspect ratio ensures that pie is drawn as a circle
+plt.title('Percentage of Attacks for the Top 7 Activities')
+plt.show()
+
+#Extracting the required columns for analysis
+countries = df['Country'].dropna()
+
+#Counting the number of shark attacks per country
+attacks_per_country = countries.value_counts()[:20]
+
+#Creating the bar chart for shark attacks per country
+plt.figure(figsize=(12, 8))
+plt.bar(attacks_per_country.index, attacks_per_country.values, color='red')
+plt.xlabel('Country')
+plt.ylabel('Number of Shark Attacks')
+plt.title('Number of Shark Attacks per Country (Top 10)')
+plt.xticks(rotation=45)
+plt.show()
+
+top_10_species = df[df['Fatal(y/n)'] == 'Y']['Species'].value_counts().nlargest(10)
+plt.figure(figsize=(10, 8))
+top_10_species.plot(kind='bar')
 plt.xlabel('Species')
-plt.ylabel('Type')
-plt.title('Species vs Type')
+plt.ylabel('Number of Fatalities')
+plt.title('Top 10 Species with the Most Fatalities')    
 plt.xticks(rotation=90)
-plt.show()
-
-plt.figure(figsize=(10, 6))
-plt.scatter(data['Type'], data['Activity'])
-plt.xlabel('Type')
-plt.ylabel('Activity')
-plt.title('Type vs Activity')
-plt.xticks(rotation=90)
-plt.show()
-
-fatal_counts = data['Fatal (Y/N)'].value_counts()
-plt.figure(figsize=(6, 6))
-plt.bar(['Y', 'N'], fatal_counts)
-plt.xlabel('Fatal')
-plt.ylabel('Count')
-plt.title('Fatal (Y/N) Distribution')
-plt.show()
-
-species_fatal_counts = data.groupby('Species')['Fatal (Y/N)'].value_counts().unstack().fillna(0)
-plt.figure(figsize=(10, 6))
-species_fatal_counts.plot(kind='bar', stacked=True)
-plt.xlabel('Species')
-plt.ylabel('Count')
-plt.title('Species vs Fatal (Y/N)')
-plt.xticks(rotation=90)
-plt.legend(title='Fatal (Y/N)')
+plt.tight_layout()
 plt.show()
 
 cur.close()
