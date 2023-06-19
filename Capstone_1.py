@@ -6,51 +6,66 @@ import matplotlib.pyplot as plt
 
 #Import the necessary CSV files
 
-data = pd.read_csv('C:\Users\RedneckRandy\Documents\GitHub\Capstone-Project-1\GSAF5.xls.csv')
+df = pd.read_csv(r'C:\Users\RedneckRandy\Documents\GitHub\Capstone-Project-1\GSAF5.csv', low_memory=False)
 
 
 #Clean the CSV data
 
 
-# Capitalize all columns
-data.columns = [col.capitalize().strip() for col in data.columns]
+#Capitalize all columns
+df.columns = [col.capitalize().strip() for col in df.columns]
 
-# Remove extra space in column names
-data.columns = data.columns.str.replace(' ', '')
+#Remove extra space in column names
+df.columns = df.columns.str.replace(' ', '')
+
+#Drop the first column
+df = df.drop(df.columns[0], axis=1)
 
 # Remove columns starting with "Unnamed"
-data = data.loc[:, ~data.columns.str.startswith('Unnamed')]
+df = df.loc[:, ~df.columns.str.startswith('Unnamed')]
 
 
-# Save the cleaned CSV as 'shark_sorted'
-data.to_csv('sharks_sorted.csv', index=False)
+#Save the cleaned CSV as 'shark_sorted'
+df.to_csv('sharks_sorted.csv', index=False)
 
 
 #Analyze the data
 
-# Count total 'Y' in 'Fatal (Y/N)'
-total_Y_fatal = data['Fatal(Y/N)'].str.count('Y').sum()
+#Total Count of 'Y' in 'Fatal (Y/N)'
+total_Y_fatal = df['Fatal(y/n)'].str.count('Y').sum()
 
-# Count total 'N' in 'Fatal (Y/N)'
-total_N_fatal = data['Fatal(Y/N)'].str.count('N').sum()
+#Total Count of 'N' in 'Fatal (Y/N)'
+total_N_fatal = df['Fatal(y/n)'].str.count('N').sum()
 
-# Average 'Age' of total 'Y'
-average_age_Y_fatal = data.loc[data['Fatal(Y/N)'] == 'Y', 'Age'].mean()
+#Convert 'Age' column to numeric using .loc
+df.loc[:, 'Age'] = pd.to_numeric(df['Age'], errors='coerce')
 
-# Total count for each unique value in 'Location' column
-location_totals = data['Location'].value_counts()
+#Filter the dataframe for records where 'Fatal(y/n)' is 'Y'
+df_Y_fatal = df[df['Fatal(y/n)'] == 'Y']
 
-# Total count for each unique value in 'Species' column
-species_totals = data['Species'].value_counts()
+#Calculate the average 'Age' for the filtered dataframe
+average_age_Y_fatal = df_Y_fatal['Age'].mean()
 
-# Total count for each unique value in 'Activity' column
-activity_totals = data['Activity'].value_counts()
+#Total count for each unique value in 'Location' column
+location_totals = df['Location'].value_counts()
 
-# Total count for each unique value in 'Type' column
-type_totals = data['Type'].value_counts()
+#Total count for each unique value in 'Species' column
+species_totals = df['Species'].value_counts()
 
-# Average of "Time"
-time_average = data['Time'].mean()
+#Total count for each unique value in 'Activity' column
+activity_totals = df['Activity'].value_counts()
+
+#Total count for each unique value in 'Type' column
+type_totals = df['Type'].value_counts()
+
+#Convert 'Time' column to numeric using .loc
+df.loc[:, 'Time'] = pd.to_numeric(df['Time'], errors='coerce')
+
+#Filter the dataframe for records where 'Fatal(y/n)' is 'Y'
+df_Y_fatal = df[df['Fatal(y/n)'] == 'Y']
+
+#Calculate the average 'Age' for the filtered dataframe
+average_time_Y_fatal = df_Y_fatal['Time'].mean()
 
 conn = psycopg2.connect(dbname='gblqlzwo',
                         user='gblqlzwo',
@@ -58,7 +73,7 @@ conn = psycopg2.connect(dbname='gblqlzwo',
                         host='rajje.db.elephantsql.com')
 cur = conn.cursor()
 
-# Define the columns for the table
+#Define the columns for the table
 columns = ['index', 'Case Number', 'Date', 'Year', 'Type', 'Country', 'Area', 'Location', 'Activity', 'Name',
            'Unnamed: 9', 'Age', 'Injury', 'Fatal (Y/N)', 'Time', 'Species', 'Investigator or Source', 'pdf',
            'href formula', 'href', 'Case Number.1', 'Case Number.2', 'original order']
