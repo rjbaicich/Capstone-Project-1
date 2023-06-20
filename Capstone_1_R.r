@@ -1,45 +1,97 @@
-#Install necessary packages and libraries.
 
-install.packages("ggplot2")
-install.packages("tidyverse")
-install.packages("tidyr")
-
+#Load required libraries
+library(dplyr)
 library(ggplot2)
-library(tidyverse)
-library(tidyr)
 
-# Import the CSV file
-data <- read.csv("C:\Users\RedneckRandy\Documents\GitHub\Capstone-Project-1\GSAF5.xls.csv")
+#Set the file path
+file_path <- "C:/Users/RedneckRandy/Downloads/archive (15)/GSAF5.csv"
 
-# Remove columns starting with "Unnamed"
-data <- data[, !grepl("^Unnamed", names(data))]
+#Import the CSV file
+data <- read.csv(file_path, stringsAsFactors = FALSE)
 
-# Remove extra space in column names
-names(data) <- gsub("\\s+", "", names(data))
+#Clean the CSV file
+cleaned_data <- data %>%
+  select(-matches("^(u|U)nnamed")) %>%
+  na.omit()
+print(cleaned_data)
 
-# Capitalize all columns
-names(data) <- toupper(names(data))
+#Calculate the number of occurrences for each species
+species_occurrences <- cleaned_data %>%
+  group_by(`Species`) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(species_occurrences)
 
-# Percent of 'Y' vs Percent of 'N' in "Fatal (Y/N)" column
-percent_Y <- sum(data$FATALYN == "Y") / nrow(data) * 100
-percent_N <- sum(data$FATALYN == "N") / nrow(data) * 100
+#Convert "Time" column to numeric
+cleaned_data$Time <- as.numeric(as.character(cleaned_data$Time))
 
-# Percent of each unique value in "Location" column
-location_percent <- prop.table(table(data$LOCATION)) * 100
+#Calculate the average of "Time"
+average_time <- cleaned_data %>%
+  summarize(Average_Time = mean(Time, na.rm = TRUE))
 
-# Percent of each unique value in "Injury" column
-injury_percent <- prop.table(table(data$INJURY)) * 100
+#Print the average time
+print(average_time)
 
-# Average of "Time"
-time_average <- mean(data$TIME)
+#Get the top 10 locations based on occurrence count
+top_locations <- cleaned_data %>%
+  group_by(Location) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  top_n(10)
+print(top_locations)
 
-# Graph 1: "Injury" vs "Fatal (Y/N)"
-library(ggplot2)
-ggplot(data, aes(x = INJURY, fill = FATALYN)) +
-  geom_bar() +
-  labs(x = "Injury", y = "Count", title = "Injury vs Fatal (Y/N)")
+#Calculate the number of occurrences for each country
+country_occurrences <- cleaned_data %>%
+  group_by(Country) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(country_occurrences)
 
-# Graph 2: "Location" vs "Time"
-ggplot(data, aes(x = LOCATION, y = TIME)) +
-  geom_point() +
-  labs(x = "Location", y = "Time", title = "Location vs Time")
+#Calculate the number of occurrences for each activity
+activity_occurrences <- cleaned_data %>%
+  group_by(Activity) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(activity_occurrences)
+
+#Filter the cleaned_data to include only the top 10 locations
+filtered_data <- cleaned_data %>%
+  filter(Location %in% top_locations$Location)
+
+#Calculate the average age for each location
+avg_age <- filtered_data %>%
+  group_by(Location) %>%
+  summarize(Average_Age = mean(Age, na.rm = TRUE)) %>%
+  arrange(desc(Average_Age)) %>%
+  top_n(10)
+
+#Graph: Top 10 Locations vs Average Age
+graph <- ggplot(avg_age, aes(x = reorder(Location, Average_Age), y = Average_Age)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Location", y = "Average Age") +
+  ggtitle("Top 10 Locations vs Average Age") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#Graph 2: Top 10 Countries vs Number of Occurrences
+top_10_countries <- head(country_occurrences, 10)  #Select the top 10 countries
+
+graph3 <- ggplot(top_10_countries, aes(x = Country, y = Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Country", y = "Number of Occurrences") +
+  ggtitle("Number of Occurrences by Country (Top 10)") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(graph3)
+
+#Print the analysis results
+print(average_time)
+
+print(species_occurrences)
+
+print(country_occurrences)
+
+print(activity_occurrences)
+
+print(top_locations)
