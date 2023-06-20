@@ -42,3 +42,8 @@ Conclusion:
 This project aims to provide a comprehensive analysis of the Shark Attack dataset, challenging common misconceptions and providing valuable insights into shark attacks in coastal waters. By examining the dataset, performing statistical analysis, and visualizing the data, we can contribute to a better understanding of shark-human interactions and promote informed decision-making for coastal water activities.
 
 Through this analysis, I hope to enhance public awareness, foster better shark-human relations, and ultimately reduce the risks associated with shark attacks.
+
+
+Supporting External Visualizations:
+
+https://public.tableau.com/app/profile/randy.baicich/viz/SharkAttackVisualization1/SharkAttackStory?publish=yes
