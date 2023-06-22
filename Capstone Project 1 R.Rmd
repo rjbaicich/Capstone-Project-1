@@ -1,0 +1,124 @@
+---
+title: 'Capstone Project 1: Shark Attacks in Coastal Waters.'
+author: "Randy Baicich"
+date: "06/16/2023"
+output: html_document
+---
+
+Starting Hypothesis:
+
+Based on initial observations and assumptions, the following hypotheses are proposed: A select few shark species will be responsible for the majority of shark attacks and fatalities, rather than a wide variety of species. The majority of shark attacks will occur at specific times, indicating a temporal pattern in shark-human interactions. The objective is to test these hypotheses and gain deeper insights into the key factors influencing shark attacks and fatalities.
+
+## Choose and Install necessary packages and libraries.
+
+```{r}
+#Load required libraries
+library(dplyr)
+library(ggplot2)
+```
+
+
+```{r}
+#Set the file path
+file_path <- "C:/Users/RedneckRandy/Downloads/archive (15)/GSAF5.csv"
+
+#Import the CSV file
+data <- read.csv(file_path, stringsAsFactors = FALSE)
+```
+
+
+```{r}
+#Clean the CSV file
+cleaned_data <- data %>%
+  select(-matches("^(u|U)nnamed")) %>%
+  na.omit()
+print(cleaned_data)
+```
+
+
+```{r}
+#Calculate the number of occurrences for each species
+species_occurrences <- cleaned_data %>%
+  group_by(`Species`) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(species_occurrences)
+```
+
+
+```{r}
+#Convert "Time" column to numeric
+cleaned_data$Time <- as.numeric(as.character(cleaned_data$Time))
+
+#Calculate the average of "Time"
+average_time <- cleaned_data %>%
+  summarize(Average_Time = mean(Time, na.rm = TRUE))
+
+#Print the average time
+cat("Average Time: ", average_time$Average_Time, "\n")
+
+```
+```{r}
+#Get the top 10 locations based on occurrence count
+top_locations <- cleaned_data %>%
+  group_by(Location) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  top_n(10)
+print(top_locations)
+```
+
+```{r}
+#Calculate the number of occurrences for each country
+country_occurrences <- cleaned_data %>%
+  group_by(Country) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(country_occurrences)
+```
+```{r}
+#Calculate the number of occurrences for each activity
+activity_occurrences <- cleaned_data %>%
+  group_by(Activity) %>%
+  summarize(Count = n()) %>%
+  arrange(desc(Count))
+print(activity_occurrences)
+```
+
+
+#Visualize the data
+
+
+```{r}
+#Graph 1: Top 10 Countries vs Number of Occurrences
+top_10_countries <- head(country_occurrences, 10)  #Select the top 10 countries
+
+graph3 <- ggplot(top_10_countries, aes(x = Country, y = Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Country", y = "Number of Occurrences") +
+  ggtitle("Number of Occurrences by Country (Top 10)") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(graph1)
+```
+
+```{r}
+#Print the analysis results
+print(average_time)
+
+print(species_occurrences)
+
+print(country_occurrences)
+
+print(activity_occurrences)
+
+print(top_locations)
+
+```
+
+
+## Summary/Conclusion.
+
+
+The analysis of shark attack data reveals important patterns and considerations. The average time of attack is approximately 1050, highlighting a specific timeframe when shark-human interactions are more likely to occur. The White shark stands out as the species with the highest number of occurrences, although caution is needed when interpreting categories involving unconfirmed shark involvement. The United States has the highest number of reported shark attacks, emphasizing the need for safety measures in coastal waters. Surfing and swimming are identified as the most dangerous activities in terms of shark attacks, underscoring the importance of adhering to safety guidelines. Overall, these findings emphasize the significance of understanding species behavior, geographic patterns, and promoting safe practices to mitigate risks in shark-human interactions.
