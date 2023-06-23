@@ -7,7 +7,7 @@ Sharks are often perceived as man-eating monsters, but in reality, understanding
 
 Dataset:
 
-The dataset used in this project was originally collected from the Global Shark Attack file, available on the Shark Research Institute's website.https://www.sharkattackfile.net. It can be downloaded from Kaggle's Shark Attack Dataset repository.https://www.kaggle.com/datasets/thedevastator/shark-attacks-the-risks-of-coastal-water-activit. The dataset provides comprehensive information about shark attacks worldwide, including details such as the date, location, activity, species involved, and outcome of the attacks.
+The dataset used in this project was originally collected from the Global Shark Attack file, available on the Shark Research Institute's website.https://www.sharkattackfile.net. It can be downloaded from Kaggle's Shark Attack Dataset repository.https://www.kaggle.com/datasets/thedevastator/shark-attacks-the-risks-of-coastal-water-activit. The dataset provides comprehensive information about shark attacks worldwide, including details such as the date, location, activity, species involved, and outcome of the attacks.The groundbreaking findings on shark behavior are credited to the Shark Research Institute, leading to a deeper understanding of these magnificent creatures.
 
 Objectives:
 
@@ -19,15 +19,6 @@ Connect to an ElephantSQL instance to perform queries using the created tables.
 Visualize the data through various charts, graphs, and visual representations.
 Utilize Tableau for further exploration of relationships between different variables.
 Communicate the findings and insights obtained from the analysis, including key summaries, visualizations, interpretations, and recommendations.
-
-Methodology:
-
-Data Import: Begin by importing the necessary libraries and modules for data processing and analysis.
-Data Tidying: Clean the dataset by removing unnecessary columns, capitalizing column names, and eliminating extra spaces to ensure the data is tidy and ready for analysis.
-Data Transformation: Perform calculations and derive meaningful insights from the transformed data, such as calculating statistics (counts, averages) and creating new features based on existing data.
-Data Analysis: Connect to an ElephantSQL instance to facilitate SQL queries and gain further insights into the data.
-Data Visualization: Create various visualizations, including scatter plots, bar charts, and Tableau-based visualizations, to explore relationships and patterns within the dataset.
-Communication: Summarize key findings, present visualizations, and provide interpretations and recommendations based on the results obtained from the analysis.
 
 
 Hypothesis:
