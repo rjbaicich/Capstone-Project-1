@@ -148,3 +148,28 @@ plt.show()
 
 cur.close()
 conn.close()
+
+
+# # Counting the number of shark attacks per year
+# attacks_per_year = df['Year'].value_counts().sort_index()
+
+# # Creating a line plot to visualize shark attacks over the years
+# plt.figure(figsize=(12, 6))
+# plt.plot(attacks_per_year.index, attacks_per_year.values, marker='o', linestyle='-')
+# plt.xlabel('Year')
+# plt.ylabel('Number of Shark Attacks')
+# plt.title('Shark Attacks Over the Years')
+# plt.grid(True)
+# plt.show()
+
+
+# # Creating a DataFrame for shark attacks by activity and outcome
+# activity_outcome_counts = df.groupby(['Activity', 'Fatal(y/n)']).size().unstack(fill_value=0)
+
+# # Plotting a stacked bar chart to visualize shark attacks by activity and outcome
+# activity_outcome_counts.plot(kind='bar', stacked=True, figsize=(12, 8))
+# plt.xlabel('Activity')
+# plt.ylabel('Number of Shark Attacks')
+# plt.title('Shark Attacks by Activity and Outcome')
+# plt.xticks(rotation=45)
+# plt.show()
