@@ -45,3 +45,5 @@ https://www.pewtrusts.org/en/projects/archived-projects/shark-alliance
 https://www.sharkwater.com/
 https://sharkstewards.org/
 https://www.sharkconservationfund.org/
+https://saveourseas.com/
+https://www.sharks.org/
