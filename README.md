@@ -38,3 +38,6 @@ Through this analysis, I hope to enhance public awareness, foster better shark-h
 Supporting External Visualizations:
 
 https://public.tableau.com/app/profile/randy.baicich/viz/SharkAttackVisualization1/SharkAttackStory?publish=yes
+
+Additional Resources/Organizations:
+https://www.sharktrust.org/
