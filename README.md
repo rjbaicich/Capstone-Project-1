@@ -41,3 +41,5 @@ https://public.tableau.com/app/profile/randy.baicich/viz/SharkAttackVisualizatio
 
 Additional Resources/Organizations:
 https://www.sharktrust.org/
+https://www.pewtrusts.org/en/projects/archived-projects/shark-alliance
+https://www.sharkwater.com/
